@@ -1,0 +1,16 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "rules": {
+    "indent": ["error", 2],
+    "eol-last": [1],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["warn", "single", "avoid-escape"],
+    "semi": ["error", "always"]
+  }
+}
