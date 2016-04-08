@@ -5,8 +5,11 @@ const _opts = Symbol('opts');
 const defaultOptions = {
   jokers: true,
   jokerPoints: 50,
-  aceAfterKing: true,
-  aceInSetPoints: 11
+  acePosition: 'both', // both | low | high
+  aceInSetPoints: 11,
+  ranks: [1,2,3,4,5,6,7,8,9,10,11,12,13],
+  rankSymbols: {'A': 1, 'J': 11, 'Q': 12, 'K': 13},
+  suitSymbols: ['s', 'h', 'd', 'c']
 };
 
 export class Rummy {
@@ -21,10 +24,16 @@ export class Rummy {
   }
 
   /**
+   * @param {string|string[]|object[]} group The group to check
    * @return {boolean} Whether the group is valid
    */
   isValidGroup(group) {
     if (group == undefined) {
+      return false;
+    }
+
+    group = this.normaliseGroup(group);
+    if (!group) {
       return false;
     }
 
@@ -34,7 +43,7 @@ export class Rummy {
 
     for (let card of group) {
       if (this.options('jokers') && typeof card.joker == 'number') {
-        card.value = 'joker';
+        card.rank = 'joker';
         card.suit = 'joker';
       }
       else {
@@ -42,23 +51,23 @@ export class Rummy {
           return false;
         }
 
-        if (typeof card.value != 'number' || card.value < 1 || card.value > 13) {
+        if (typeof card.rank != 'number' || card.rank < 1 || card.rank > 13) {
           return false;
         }
       }
     }
 
-    let values = group.map(card => card.value),
-      valuesWithoutJokers = values.filter(x => x != 'joker'),
-      uniqueValues = unique(valuesWithoutJokers),
-      jokerCount = values.reduce((total, x) => (x == 'joker' ? total+1 : total), 0);
+    let ranks = group.map(card => card.rank),
+      ranksWithoutJokers = ranks.filter(x => x != 'joker'),
+      uniqueValues = unique(ranksWithoutJokers),
+      jokerCount = ranks.reduce((total, x) => (x == 'joker' ? total+1 : total), 0);
 
     let suits = group.map(card => card.suit),
       suitsWithoutJokers = suits.filter(x => x != 'joker'),
       uniqueSuits = unique(suitsWithoutJokers, this.options('jokers'));
 
-    if ((values.length == 3 && jokerCount > 1)
-    || ( values.length == 4 && jokerCount > 2)) {
+    if ((ranks.length == 3 && jokerCount > 1)
+    || ( ranks.length == 4 && jokerCount > 2)) {
       return false;
     }
 
@@ -68,19 +77,22 @@ export class Rummy {
     }
 
     // If there is an ace
-    let aceIndex;
-    if (this.options('aceAfterKing') && (aceIndex = valuesWithoutJokers.indexOf(1))) {
-      if (values.indexOf(13) || (jokerCount > 0 && values.indexOf(12))) {
-        valuesWithoutJokers[aceIndex] = 14;
+    let aceIndex = ranksWithoutJokers.indexOf(1);
+    if (aceIndex && this.options('acePosition') === 'both') {
+      if (ranks.indexOf(13) || (jokerCount > 0 && ranks.indexOf(12))) {
+        ranksWithoutJokers[aceIndex] = 14;
       }
-      else if (!values.indexOf(2) && !(jokerCount > 0 && values.indexOf(3))) {
+      else if (!ranks.indexOf(2) && !(jokerCount > 0 && ranks.indexOf(3))) {
         return false;
       }
     }
+    else if (aceIndex && this.options('acePosition') === 'high') {
+      ranksWithoutJokers[aceIndex] = 14;
+    }
 
     // Run
-    if (uniqueSuits.length == 1 && uniqueValues.length == valuesWithoutJokers.length
-    && isConsecutive(valuesWithoutJokers, jokerCount)) {
+    if (uniqueSuits.length == 1 && uniqueValues.length == ranksWithoutJokers.length
+    && isConsecutive(ranksWithoutJokers, jokerCount)) {
       return true;
     }
 
@@ -107,6 +119,70 @@ export class Rummy {
     for (let i in keyOrOpts) {
       opts[i] = keyOrOpts[i];
     }
+  }
+
+  /**
+   * @param {string|string[]|object[]} group The group to normalise
+   * @return {object[]} The normalised group
+   */
+  normaliseGroup(group) {
+    if (typeof group == 'string') {
+      group = group.trim().replace(/(\s+)/g, ' ').split(' ');
+    }
+
+    if (Object.prototype.toString.call(group) != '[object Array]') {
+      return false;
+    }
+
+    let newGroup = group.map((card) => {
+      if (typeof card == 'object'
+      && (('joker' in card) || (('suit' in card) && ('rank' in card)))) {
+        return card;
+      }
+
+      if (typeof card == 'string') {
+        return this.parseCardCode(card);
+      }
+    })
+    .filter(x => x != undefined);
+
+    // If newGroups contains a false value
+    if (!newGroup.reduce((prev, curr) => (!prev || !curr ? false : true), true)) {
+      return false;
+    }
+
+    return newGroup;
+  }
+
+  /**
+   * @param {string} code The code to parse
+   * @return {object} The resulting card object
+   */
+  parseCardCode(code) {
+    if (typeof code != 'string') {
+      return false;
+    }
+
+    const ranks = this.options('ranks'),
+      rankSymbols = this.options('rankSymbols'),
+      rankCodes = ranks.concat(Object.keys(rankSymbols)),
+      suitSymbols = this.options('suitSymbols'),
+      regex = new RegExp(`(${rankCodes.join('|')})(${suitSymbols.join('|')})`, 'g');
+
+    if (code === 'X') {
+      return { joker: 1 };
+    }
+
+    const match = regex.exec(code);
+
+    if (!match) {
+      return false;
+    }
+
+    let rank = ((match[1] in rankSymbols) ? rankSymbols[match[1]] : parseInt(match[1])),
+      suit = suitSymbols.indexOf(match[2]);
+
+    return { rank, suit };
   }
 }
 
