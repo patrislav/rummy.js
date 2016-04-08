@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import Rummy from '..';
 
-describe('Rummy.options', () => {
+describe('Rummy.options()', () => {
 
   describe('when called without arguments', () => {
     it('returns default options', () => {
