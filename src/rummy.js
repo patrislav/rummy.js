@@ -2,12 +2,18 @@
 import { version } from '../package.json';
 
 const _opts = Symbol('opts');
+const defaultOptions = {
+  jokers: true,
+  jokerPoints: 50,
+  aceAfterKing: true,
+  aceInSetPoints: 11
+};
 
 export class Rummy {
   static version = version;
 
   constructor() {
-    this[_opts] = {};
+    this[_opts] = Object.create(defaultOptions);
   }
 
   /**
@@ -23,28 +29,43 @@ export class Rummy {
     }
 
     for (let card of group) {
-      if (typeof card.suit != 'number' || card.suit < 0 || card.suit > 3) {
-        return false;
+      if (this.options('jokers') && typeof card.joker == 'number') {
+        card.value = 'joker';
+        card.suit = 'joker';
       }
+      else {
+        if (typeof card.suit != 'number' || card.suit < 0 || card.suit > 3) {
+          return false;
+        }
 
-      if (typeof card.value != 'number' || card.value < 1 || card.value > 13) {
-        return false;
+        if (typeof card.value != 'number' || card.value < 1 || card.value > 13) {
+          return false;
+        }
       }
     }
 
     let values = group.map(card => card.value).sort(),
-      uniqueValues = unique(values);
+      valuesWithoutJokers = values.filter(x => x != 'joker'),
+      uniqueValues = unique(valuesWithoutJokers),
+      jokerCount = values.reduce((total, x) => (x == 'joker' ? total+1 : total), 0);
+
     let suits = group.map(card => card.suit).sort(),
-      uniqueSuits = unique(suits);
+      suitsWithoutJokers = suits.filter(x => x != 'joker'),
+      uniqueSuits = unique(suitsWithoutJokers, this.options('jokers'));
+
+    if ((values.length == 3 && jokerCount > 1)
+    || ( values.length == 4 && jokerCount > 2)) {
+      return false;
+    }
 
     // Set
-    if (uniqueValues.length == 1 && uniqueSuits.length == suits.length) {
+    if (uniqueValues.length == 1 && uniqueSuits.length == suitsWithoutJokers.length) {
       return true;
     }
 
     // Run
-    if (uniqueSuits.length == 1 && uniqueValues.length == values.length
-    && isConsecutive(values)) {
+    if (uniqueSuits.length == 1 && uniqueValues.length == valuesWithoutJokers.length
+    && isConsecutive(valuesWithoutJokers, jokerCount)) {
       return true;
     }
 
@@ -89,10 +110,15 @@ function unique(array) {
   });
 }
 
-function isConsecutive(array) {
+function isConsecutive(array, jokerCount) {
   for (let i = 0; i < array.length-1; i++) {
     if (array[i+1] !== array[i]+1) {
-      return false;
+      if (jokerCount > 0 && array[i+1] === array[i]+2) {
+        jokerCount -= 1;
+      }
+      else {
+        return false;
+      }
     }
   }
   return true;
