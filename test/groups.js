@@ -19,13 +19,15 @@ describe('Rummy.isValidGroup()', () => {
     let validGroups = [
       [{ suit: 0, value: 1 }, { suit: 0, value: 2 }, { suit: 0, value: 3 }],
       [{ suit: 0, value: 6 }, { suit: 0, value: 7 }, { suit: 0, value: 5 }, { suit: 0, value: 4 }],
-      [{ suit: 0, value: 9 }, { suit: 1, value: 9 }, { suit: 2, value: 9 }]
+      [{ suit: 0, value: 9 }, { suit: 1, value: 9 }, { suit: 2, value: 9 }],
+      [{ suit: 0, value: 12 }, { suit: 0, value: 13 }, { suit: 0, value: 1 }]
     ];
     let validJokerGroups = [
       [{ suit: 0, value: 4 }, { joker: 1 }, { suit: 0, value: 6 }],
       [{ suit: 0, value: 5 }, { suit: 0, value: 6 }, { joker: 1 }],
-      [{ suit: 0, value: 5 }, { suit: 1, value: 5}, { joker: 1 }],
-      [{ suit: 0, value: 1 }, { joker: 1 }, { suit: 0, value: 3 }, { joker: 2 }, { suit: 0, value: 5 }]
+      [{ suit: 0, value: 5 }, { suit: 1, value: 5 }, { joker: 1 }],
+      [{ suit: 0, value: 1 }, { joker: 1 }, { suit: 0, value: 3 }, { joker: 2 }, { suit: 0, value: 5 }],
+      [{ suit: 0, value: 12 }, { joker: 1 }, { suit: 0, value: 1 }]
     ];
     let invalidGroups = [
       // Too few cards
@@ -46,7 +48,11 @@ describe('Rummy.isValidGroup()', () => {
       // Almost a set but not really
       [{ suit: 0, value: 7 }, { suit: 1, value: 7 }, { suit: 2, value: 8 }],
       // Run with a gap
-      [{ suit: 0, value: 2 }, { suit: 0, value: 4 }, { suit: 0, value: 5 }]
+      [{ suit: 0, value: 2 }, { suit: 0, value: 4 }, { suit: 0, value: 5 }],
+      [{ suit: 0, value: 1 }, { suit: 0, value: 3 }, { suit: 0, value: 4 }],
+      [{ suit: 0, value: 11 }, { suit: 0, value: 12 }, { suit: 0, value: 1 }],
+      // No wrapping ace
+      [{ suit: 0, value: 13 }, { suit: 0, value: 1 }, { suit: 0, value: 2 }]
     ];
     let invalidJokerGroups = [
       // Max 1 joker in 3-card group

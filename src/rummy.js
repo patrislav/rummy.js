@@ -44,12 +44,12 @@ export class Rummy {
       }
     }
 
-    let values = group.map(card => card.value).sort(),
+    let values = group.map(card => card.value),
       valuesWithoutJokers = values.filter(x => x != 'joker'),
       uniqueValues = unique(valuesWithoutJokers),
       jokerCount = values.reduce((total, x) => (x == 'joker' ? total+1 : total), 0);
 
-    let suits = group.map(card => card.suit).sort(),
+    let suits = group.map(card => card.suit),
       suitsWithoutJokers = suits.filter(x => x != 'joker'),
       uniqueSuits = unique(suitsWithoutJokers, this.options('jokers'));
 
@@ -61,6 +61,17 @@ export class Rummy {
     // Set
     if (uniqueValues.length == 1 && uniqueSuits.length == suitsWithoutJokers.length) {
       return true;
+    }
+
+    // If there is an ace
+    let aceIndex;
+    if (this.options('aceAfterKing') && (aceIndex = valuesWithoutJokers.indexOf(1))) {
+      if (values.indexOf(13) || (jokerCount > 0 && values.indexOf(12))) {
+        valuesWithoutJokers[aceIndex] = 14;
+      }
+      else if (!values.indexOf(2) && !(jokerCount > 0 && values.indexOf(3))) {
+        return false;
+      }
     }
 
     // Run
@@ -111,6 +122,8 @@ function unique(array) {
 }
 
 function isConsecutive(array, jokerCount) {
+  array.sort();
+
   for (let i = 0; i < array.length-1; i++) {
     if (array[i+1] !== array[i]+1) {
       if (jokerCount > 0 && array[i+1] === array[i]+2) {
