@@ -12,8 +12,12 @@ const defaultOptions = {
 export class Rummy {
   static version = version;
 
-  constructor() {
+  constructor(options) {
     this[_opts] = Object.create(defaultOptions);
+
+    if (typeof options == 'object') {
+      this.options(options);
+    }
   }
 
   /**
