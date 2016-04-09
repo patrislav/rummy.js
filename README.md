@@ -2,6 +2,10 @@
 
 Rummy.js is a Javascript library for managing Rummy games.
 
+**Warning!** This library is currently under heavy development. The API is
+unstable and may change at any moment without prior notice. Use at your own
+risk.
+
 ## Installation
 
 ```bash
@@ -24,7 +28,8 @@ var rummy = new Rummy(options);
 
 ### Constructor
 
-The Rummy() constructor takes an optional parameter with initial configuration. Consult the `.options` method for reference.
+The Rummy() constructor takes an optional parameter with initial configuration.
+Consult the `.options` method for reference.
 
 ```javascript
 // Create with default configuration
@@ -46,7 +51,8 @@ rummy.isValidGroup(['8s', '9s', '10s', 'X', 'Qs']);
 
 ### .options
 
-When this method is called with no parameters it will return an object with all current options.
+When this method is called with no parameters it will return an object with all
+current options.
 
 ```javascript
 var options = rummy.options();
