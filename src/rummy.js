@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2016, Patryk Kalinowski
+ * Released under the ISC license
+ * https://github.com/patrislav/rummy.js/blob/master/LICENSE
+ */
 
 import { version } from '../package.json';
 
