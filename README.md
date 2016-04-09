@@ -12,7 +12,7 @@ $ npm install rummy
 
 ```javascript
 // Using ES5 require()
-var Rummy = require('rummy'),
+var Rummy = require('rummy').Rummy,
     rummy = new Rummy(options);
 
 // Using ES2015 modules
