@@ -1,6 +1,6 @@
 {
   "name": "rummy",
-  "version": "0.1.0",
+  "version": "0.2.0-dev",
   "description": "A Javascript library for managing Rummy games",
   "main": "./lib/rummy.js",
   "homepage": "https://github.com/patrislav/rummy.js",
@@ -9,7 +9,7 @@
     "url": "https://github.com/patrislav/rummy.js.git"
   },
   "keywords": [
-    "rummy"
+    "rummy", "cards", "cardgame", "boardgame"
   ],
   "author": {
     "email": "patrislav7@gmail.com",
