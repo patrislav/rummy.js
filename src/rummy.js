@@ -6,6 +6,7 @@
  */
 
 import { version } from '../package.json';
+import Card from './card';
 
 const _opts = Symbol('opts');
 const defaultOptions = {
@@ -20,6 +21,8 @@ const defaultOptions = {
 
 export class Rummy {
   static version = version;
+
+  static Card = Card;
 
   constructor(options) {
     this[_opts] = Object.create(defaultOptions);
@@ -192,6 +195,7 @@ export class Rummy {
   }
 }
 
+export { Card };
 export default Rummy;
 
 /* Private helper functions
