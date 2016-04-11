@@ -1,12 +1,19 @@
 
 export function CardConstants(target) {
-  target.SPADES = 0;
-  target.HEARTS = 1;
-  target.DIAMONDS = 2;
-  target.CLUBS = 3;
+  let properties = {
+    SPADES: 0,
+    HEARTS: 1,
+    DIAMONDS: 2,
+    CLUBS: 3,
 
-  target.ACE = 1;
-  target.JACK = 11;
-  target.QUEEN = 12;
-  target.KING = 13;
+    ACE: 1,
+    JACK: 11,
+    QUEEN: 12,
+    KING: 13,
+  };
+
+  for(let name in properties) {
+    target[name] = properties[name];
+    target.prototype[name] = properties[name];
+  }
 }
