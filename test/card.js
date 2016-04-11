@@ -1,13 +1,14 @@
 import { expect } from 'chai';
 
-import { Card } from '..';
+import Rummy from '..';
 
-let aceOfSpades, kingOfHearts, sevenOfClubs;
+let rummy, aceOfSpades, kingOfHearts, sevenOfClubs;
 
 beforeEach(() => {
-  aceOfSpades = new Card('As');
-  kingOfHearts = new Card({ suit: Card.HEARTS, rank: Card.KING });
-  sevenOfClubs = new Card('7c');
+  rummy = new Rummy();
+  aceOfSpades = new rummy.Card('As');
+  kingOfHearts = new rummy.Card({ suit: Rummy.HEARTS, rank: Rummy.KING });
+  sevenOfClubs = new rummy.Card('7c');
 });
 
 describe('Card', () => {
@@ -27,22 +28,22 @@ describe('Card', () => {
 
   describe('.suit', () => {
     it('returns the correct suit', () => {
-      expect(aceOfSpades.suit).to.equal(Card.SPADES);
-      expect(kingOfHearts.suit).to.equal(Card.HEARTS);
-      expect(sevenOfClubs.suit).to.equal(Card.CLUBS);
+      expect(aceOfSpades.suit).to.equal(Rummy.SPADES);
+      expect(kingOfHearts.suit).to.equal(Rummy.HEARTS);
+      expect(sevenOfClubs.suit).to.equal(Rummy.CLUBS);
     });
 
     it('sets the suit correctly', () => {
-      aceOfSpades.suit = Card.DIAMONDS;
-      expect(aceOfSpades.suit).to.equal(Card.DIAMONDS);
+      aceOfSpades.suit = Rummy.DIAMONDS;
+      expect(aceOfSpades.suit).to.equal(Rummy.DIAMONDS);
       expect(aceOfSpades.code).to.equal('Ad');
     });
   });
 
   describe('.rank', () => {
     it('returns the correct rank', () => {
-      expect(aceOfSpades.rank).to.equal(Card.ACE);
-      expect(kingOfHearts.rank).to.equal(Card.KING);
+      expect(aceOfSpades.rank).to.equal(Rummy.ACE);
+      expect(kingOfHearts.rank).to.equal(Rummy.KING);
       expect(sevenOfClubs.rank).to.equal(7);
     });
 

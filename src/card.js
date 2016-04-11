@@ -15,14 +15,29 @@ class Card {
       this.suit = object.suit;
     }
     else {
-      if ('suit' in objectOrCode) {
+      if (objectOrCode.joker) {
+        this.joker = objectOrCode.joker;
+        this.suit = 'joker';
+        this.rank = 'joker'
+      }
+
+      if (typeof objectOrCode.suit == 'number') {
         this.suit = objectOrCode.suit;
       }
 
-      if ('rank' in objectOrCode) {
+      if (typeof objectOrCode.rank == 'number') {
         this.rank = objectOrCode.rank;
       }
     }
+  }
+
+  /**
+   * @return {boolean} isValid
+   */
+  get valid() {
+    return (typeof this.rank == 'number' && this.suit >= 0 && this.suit <= 3
+    && typeof this.suit == 'number' && this.rank >= 1 && this.rank <= 13)
+    || !!this.joker;
   }
 
   /**
@@ -45,20 +60,31 @@ class Card {
    * @return {string} rankCode
    */
   get rankCode() {
+    if (this.rank === 'joker') {
+      return 'X';
+    }
+
     for (let symbol in rankSymbols) {
       if (rankSymbols[symbol] == this.rank) {
         return symbol;
       }
     }
 
-    return this.rank.toString();
+    if (this.rank) {
+      return this.rank.toString();
+    }
+
+    return '';
   }
 
   /**
    * @return {string} suitCode
    */
   get suitCode() {
-    return suitSymbols[this.suit].toString();
+    if (suitSymbols[this.suit]) {
+      return suitSymbols[this.suit].toString();
+    }
+    return '';
   }
 }
 
