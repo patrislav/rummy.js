@@ -5,7 +5,6 @@ const ranks = [1,2,3,4,5,6,7,8,9,10,11,12,13],
   rankSymbols = {'A': 1, 'J': 11, 'Q': 12, 'K': 13},
   suitSymbols = ['s', 'h', 'd', 'c'];
 
-@CardConstants
 class Card {
 
   constructor(objectOrCode) {
