@@ -79,6 +79,11 @@ export class Rummy {
     for (let i in keyOrOpts) {
       opts[i] = keyOrOpts[i];
     }
+
+    // Update the reference to this object, otherwise the created objects have
+    // a reference to the old object.
+    this.Card.prototype.rummy = this;
+    this.Group.prototype.rummy = this;
   }
 
 }
