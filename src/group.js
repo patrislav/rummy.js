@@ -16,6 +16,10 @@ class Group {
     }
   }
 
+  toString() {
+    return this.cards.map(x => x.code).join(' ');
+  }
+
   get type() {
     return this.valid ? this[_type] : 'invalid';
   }
@@ -30,13 +34,9 @@ class Group {
       return false;
     }
 
-    console.log('Not false');
-
     if (group.length < 3) {
       return false;
     }
-
-    console.log('>= 3');
 
     let ranks = group.map(card => card.rank),
       ranksWithoutJokers = ranks.filter(x => x != 'joker'),

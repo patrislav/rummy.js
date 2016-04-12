@@ -9,7 +9,7 @@ export function CardConstants(target) {
     ACE: 1,
     JACK: 11,
     QUEEN: 12,
-    KING: 13,
+    KING: 13
   };
 
   for(let name in properties) {

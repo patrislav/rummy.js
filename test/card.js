@@ -54,4 +54,8 @@ describe('Card', () => {
     });
   });
 
+  describe('.valid', () => {
+    // @TODO Add tests!!!
+  });
+
 });

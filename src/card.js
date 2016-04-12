@@ -1,6 +1,4 @@
 
-import { CardConstants } from './decorators';
-
 const ranks = [1,2,3,4,5,6,7,8,9,10,11,12,13],
   rankSymbols = {'A': 1, 'J': 11, 'Q': 12, 'K': 13},
   suitSymbols = ['s', 'h', 'd', 'c'];
@@ -12,12 +10,13 @@ class Card {
       let object = parseCardCode(objectOrCode);
       this.rank = object.rank;
       this.suit = object.suit;
+      this.joker = object.joker;
     }
     else {
       if (objectOrCode.joker) {
         this.joker = objectOrCode.joker;
         this.suit = 'joker';
-        this.rank = 'joker'
+        this.rank = 'joker';
       }
 
       if (typeof objectOrCode.suit == 'number') {
@@ -94,6 +93,10 @@ export default Card;
  * ========================================================================= */
 
 function parseCardCode(code) {
+  if (code === 'X') {
+    return { joker: 1, suit: 'joker', rank: 'joker' };
+  }
+
   const rankCodes = ranks.concat(Object.keys(rankSymbols)),
     regex = new RegExp(`(${rankCodes.join('|')})(${suitSymbols.join('|')})`, 'g');
 
