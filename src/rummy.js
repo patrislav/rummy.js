@@ -9,6 +9,8 @@ import { version } from '../package.json';
 import Card from './card';
 import Group from './group';
 import Board from './board';
+import Pile from './pile';
+import Player from './player';
 import { CardConstants } from './decorators';
 
 const _opts = Symbol('opts');
@@ -33,9 +35,16 @@ export class Rummy {
     this.Card.prototype.rummy = this;
     this.Group = Group;
     this.Group.prototype.rummy = this;
+    this.Player = Player;
+    this.Player.prototype.rummy = this;
+    this.Pile = Pile;
+    this.Pile.prototype.rummy = this;
 
     this.board = new Board();
     this.board.rummy = this;
+
+    this.stock = new this.Pile();
+    this.discard = new this.Pile();
 
     if (typeof options == 'object') {
       this.options(options);
@@ -84,6 +93,8 @@ export class Rummy {
     // a reference to the old object.
     this.Card.prototype.rummy = this;
     this.Group.prototype.rummy = this;
+    this.Pile.prototype.rummy = this;
+    this.Player.prototype.rummy = this;
   }
 
 }
