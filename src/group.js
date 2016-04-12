@@ -14,7 +14,7 @@ class Group {
       group = group.trim().replace(/(\s+)/g, ' ').split(' ');
     }
 
-    this.cards = group.map((card) => new Card(card)).filter(x => x.valid);
+    this.cards = group.map(card => new Card(card)).filter(x => x.valid);
     if (!this.rummy.options('jokers')) {
       this.cards = this.cards.filter(x => !x.joker);
     }
