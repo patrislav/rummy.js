@@ -2,7 +2,11 @@ import { expect } from 'chai';
 
 import Rummy from '..';
 
-const rummy = new Rummy();
+let rummy;
+
+beforeEach(() => {
+  rummy = new Rummy();
+});
 
 describe('Rummy.Group', () => {
   describe('constructor', () => {
@@ -82,32 +86,32 @@ describe('Rummy.Group', () => {
     ];
 
     validGroups.forEach(item => {
-      let group = new rummy.Group(item);
-      it(`${group} is valid`, () => {
+      it(`${JSON.stringify(item)} is valid`, () => {
+        let group = new rummy.Group(item);
         expect(group.valid).to.be.true;
       });
     });
 
     invalidGroups.forEach(item => {
-      let group = new rummy.Group(item);
-      it(`${group} is invalid`, () => {
+      it(`${JSON.stringify(item)} is invalid`, () => {
+        let group = new rummy.Group(item);
         expect(group.valid).to.be.false;
       });
     });
 
     describe("with 'jokers' option", () => {
       validJokerGroups.forEach(item => {
-        rummy.options({ jokers: true });
-        let group = new rummy.Group(item);
-        it(`${group} is valid`, () => {
+        it(`${JSON.stringify(item)} is valid`, () => {
+          rummy.options({ jokers: true });
+          let group = new rummy.Group(item);
           expect(group.valid).to.be.true;
         });
       });
 
       invalidJokerGroups.forEach(item => {
-        rummy.options({ jokers: true });
-        let group = new rummy.Group(item);
-        it(`${group} is invalid`, () => {
+        it(`${JSON.stringify(item)} is invalid`, () => {
+          rummy.options({ jokers: true });
+          let group = new rummy.Group(item);
           expect(group.valid).to.be.false;
         });
       });
@@ -115,9 +119,9 @@ describe('Rummy.Group', () => {
 
     describe("without 'jokers' option", () => {
       validJokerGroups.concat(invalidJokerGroups).forEach(item => {
-        rummy.options({ jokers: false });
-        let group = new rummy.Group(item);
-        it(`${group} is invalid`, () => {
+        it(`${JSON.stringify(item)} is invalid`, () => {
+          rummy.options({ jokers: false });
+          let group = new rummy.Group(item);
           expect(group.valid).to.be.false;
         });
       });
