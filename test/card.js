@@ -55,7 +55,21 @@ describe('Card', () => {
   });
 
   describe('.valid', () => {
-    // @TODO Add tests!!!
+    describe('when the card is valid', () => {
+      it('returns true', () => {
+        expect(aceOfSpades.valid).to.be.true;
+        expect(kingOfHearts.valid).to.be.true;
+        expect(sevenOfClubs.valid).to.be.true;
+        expect(new rummy.Card('X').valid).to.be.true;
+      });
+    });
+
+    describe('when the card is invalid', () => {
+      it('returns false', () => {
+        expect(new rummy.Card('invalid').valid).to.be.false;
+        expect(new rummy.Card('aS').valid).to.be.false;
+      });
+    });
   });
 
 });

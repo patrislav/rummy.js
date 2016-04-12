@@ -4,7 +4,9 @@ const ranks = [1,2,3,4,5,6,7,8,9,10,11,12,13],
   suitSymbols = ['s', 'h', 'd', 'c'];
 
 class Card {
-
+  /**
+   * @param {Object|string} objectOrCode
+   */
   constructor(objectOrCode) {
     if (typeof objectOrCode == 'string') {
       let object = parseCardCode(objectOrCode);
