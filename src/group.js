@@ -1,11 +1,15 @@
 
 import Card from './card';
 
-const _type = Symbol('type');
+const _type = new WeakMap();
 
 class Group {
-
+  /**
+   * @param {Object|string} group
+   */
   constructor(group) {
+    _type.set(this, null);
+
     if (typeof group == 'string') {
       group = group.trim().replace(/(\s+)/g, ' ').split(' ');
     }
@@ -16,18 +20,23 @@ class Group {
     }
   }
 
+  /**
+   * @return {string} The string representation of the Group
+   */
   toString() {
     return this.cards.map(x => x.code).join(' ');
   }
 
+  /**
+   * @return {string} type Either a 'run' or a 'set'
+   */
   get type() {
-    return this.valid ? this[_type] : 'invalid';
+    return this.valid ? _type.get(this) : 'invalid';
   }
 
-  set type(newType) {
-    this[_type] = newType;
-  }
-
+  /**
+   * @return {boolean} Whether the Group is valid
+   */
   get valid() {
     let group = this.cards;
     if (!group) {
@@ -54,7 +63,7 @@ class Group {
 
     // Set
     if (uniqueValues.length == 1 && uniqueSuits.length == suitsWithoutJokers.length) {
-      this.type = 'set';
+      _type.set(this, 'set');
       return true;
     }
 
@@ -75,7 +84,7 @@ class Group {
     // Run
     if (uniqueSuits.length == 1 && uniqueValues.length == ranksWithoutJokers.length
     && isConsecutive(ranksWithoutJokers, jokerCount)) {
-      this.type = 'run';
+      _type.set(this, 'run');
       return true;
     }
 
